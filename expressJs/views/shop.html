@@ -6,16 +6,57 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shop</title>
+    <style>
+        body{
+            padding: 0;
+            margin: 0;
+            font-family: sans-serif;
+        }
+        main{
+            padding: 1rem;
+        }
+        .mainHeader{
+            width: 100%;
+            height: 3.5rem;
+            background-color: #dbc441;
+            padding: 0 1.5em;
+        }
+        .mainHeaderNav{
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+        .mainHeaderNavList{
+            list-style: none;
+            padding: 0;
+            margin: 0 1em;
+            display: flex;
+        }
+        .mainHeaderNavItem{
+            margin: 0;
+            padding: 0 1.5em;
+        }
+        .mainHeaderNavItem a{
+            text-decoration: none;
+            color: black;
+        }
+        .mainHeaderNavItem a:hover,
+        .mainHeaderNavItem a:active,
+        .mainHeaderNavItem a.active{
+            text-decoration: none;
+            color: purple;
+        }
+    </style>
 </head>
 
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li>
-                    <a href="/">Shop</a>
+    <header class="mainHeader">
+        <nav class="mainHeaderNav">
+            <ul class="mainHeaderNavList">
+                <li class="mainHeaderNavItem">
+                    <a href="/" class="active">Shop</a>
                 </li>
-                <li>
+                <li class="mainHeaderNavItem">
                     <a href="/admin/add-product">Add product</a>
                 </li>
             </ul>
