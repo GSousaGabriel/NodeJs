@@ -1,22 +1,9 @@
-doctype html
-html(lang="en")
-    head
-        meta(charset="UTF-8")
-        meta(http-equiv="X-UA-Compatible", content="IE=edge")
-        meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        title #{docTitle}
-        link(rel="stylesheet", href="/css/main.css")
-    body
-        header.mainHeader
-            nav.mainHeaderNav
-                ul.mainHeaderNavList
-                    li.mainHeaderNavItem
-                        a.active(href="/") Shop
-                    li.mainHeaderNavItem
-                        a(href="/admin/add-product") Add product
-        main
-            ul.mainHeaderNavList
-                each product in products
-                    li.mainHeaderNavItem
-                        p #{product.title}
-            
+extends layouts/main-layout.pug
+
+block content
+    main
+        ul.mainHeaderNavList
+            each product in products
+                li.mainHeaderNavItem
+                    p #{product.title}
+        
