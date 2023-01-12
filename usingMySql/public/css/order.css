@@ -1,0 +1,32 @@
+.list-order{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    margin: auto;
+    max-width:90%;
+}
+
+.list{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 80%;
+    margin: auto;
+}
+
+.list-item{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+}
+
+.itemImage{
+    width: 10em;
+    height:auto;
+}
+
+.buy{
+    margin-top: 1em;
+}
