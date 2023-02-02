@@ -8,6 +8,10 @@ const router = express.Router();
 
 router.get('/', shopController.getIndex);
 
+router.get('/login', shopController.getIndex);
+
+router.post('/login', shopController.getIndex);
+
 router.get('/products', shopController.getProducts);
 
 router.get('/products/:productId', shopController.getProduct);

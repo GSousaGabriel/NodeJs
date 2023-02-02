@@ -1,4 +1,5 @@
 const Product = require('../models/product');
+const User = require('../models/user')
 
 exports.getProducts = (req, res, next) => {
   Product.fetchAll()
@@ -28,16 +29,19 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll()
-    .then(products => {
-      res.render('shop/index', {
-        prods: products,
-        pageTitle: 'Shop',
-        path: '/'
-      });
+  res.render('shop/product-list', {
+    pageTitle: 'Login',
+    path: '/products'
+  });
+};
+
+exports.postLogin = (req, res, next) => {
+  User.findOne(req.body.username, req.body.pass)
+    .then(user => {
+      res.redirect('/cart');
     })
-    .catch(err => {
-      console.log(err);
+    .catch(error => {
+      console.log(error)
     });
 };
 

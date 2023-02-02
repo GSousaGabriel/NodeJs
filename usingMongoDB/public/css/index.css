@@ -1,0 +1,53 @@
+.centered {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -100%);
+}
+
+.data {
+    width: 20em;
+    height: 10em;
+    border: 2px solid blue;
+    border-radius: 12px;
+}
+
+input {
+    padding: 2px;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 12px;
+    width: 90%;
+    height: 2.5em;
+}
+
+.inputs {
+    padding-top: 1em;
+    width: 100%;
+}
+
+.username{
+    padding-bottom: 10px;
+}
+
+.buttons{
+    position: absolute;
+    right: 4em;
+    left: 0;
+    bottom: 0.5em;
+    padding-bottom: 3px;
+    padding-right: 3px;
+}
+
+button{
+    width: 10em;
+    height: 35px;
+    border-color: dodgerblue;
+    border-radius: 30px;
+}
+
+button:hover{
+    background: darkgray;
+    cursor: pointer;
+}
