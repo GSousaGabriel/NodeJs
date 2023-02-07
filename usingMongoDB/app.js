@@ -30,7 +30,7 @@ app.use((req, res, next) => {
       return user
     })
     .then(user=>{
-      req.user= user[0]
+      req.user= new User(user[0]._id, user[0].pass, user[0].cart, user[0].orders)
       next()
     })
     .catch(error => {

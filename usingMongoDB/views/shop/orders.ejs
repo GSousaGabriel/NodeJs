@@ -11,7 +11,7 @@
                         <h1>Order <%= order.id %>:</h1>
                         <li class="list-item">
                             <ul class="list">
-                                <% order.products.forEach(p=>{ %>
+                                <% order.items.forEach(p=>{ %>
                                     <li class="list-item">
                                         <% if(p.imageUrl){ %>
                                             <img class="itemImage" src="<%= p.imageUrl %>"/>
@@ -19,11 +19,11 @@
                                             <h1>No image!</h1>
                                         <% } %>
                                         <h1><%= p.title %></h1>
-                                        <h2>Quantity: <%= p.orderItem.quantity %></h2>
+                                        <h2>Quantity: <%= p.quantity %></h2>
                                         <h2>Unit price: <%= p.price %></h2>
-                                        <h2>Total price: <%= p.price *  p.orderItem.quantity %></h2>
+                                        <h2>Total price: <%= p.price *  p.quantity %></h2>
                                         <form action="/delete-order-item" method="POST">
-                                            <input type="hidden" value="<%= p.id %>" name="productId" id="productId"/>
+                                            <input type="hidden" value="<%= p._id %>" name="productId" id="productId"/>
                                             <button type="submit" class="btn danger">Remove</button>
                                         </form>
                                     </li>
