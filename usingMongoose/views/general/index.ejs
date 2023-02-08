@@ -1,0 +1,30 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/index.css">
+    </head>
+
+    <body>
+        <main>
+            <form action="/login" method="POST">
+                <div class="centered">
+                    <div>
+                        <h1>Login to access the shop</h1>
+                    </div>
+                    <div class="data">
+                        <div class="inputs">
+                            <div class="username">
+                                <input type="text" id="username" name="username" placeholder="username"/>
+                            </div>
+                            <div class="pass">
+                                <input type="password" id="pass" name="pass" placeholder="password"/>
+                            </div>
+                        </div>
+                        <div class="buttons">
+                            <button type="submit">Enter</button>
+                            <button type="submit">New account</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </main>
+
+<%- include('../includes/end.ejs') %>
