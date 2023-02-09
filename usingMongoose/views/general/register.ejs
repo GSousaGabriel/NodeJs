@@ -1,17 +1,20 @@
 <%- include('../includes/head.ejs') %>
-    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/register.css">
     </head>
 
     <body>
         <main>
-            <form action="/login" method="POST">
+            <form action="/register" method="POST">
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <div class="centered">
                     <div>
-                        <h1>Login to access the shop</h1>
+                        <h1>Register to access the shop</h1>
                     </div>
                     <div class="data">
                         <div class="inputs">
+                            <div class="username">
+                                <input type="text" id="username" name="username" placeholder="username"/>
+                            </div>
                             <div class="username">
                                 <input type="text" id="email" name="email" placeholder="email"/>
                             </div>
@@ -27,8 +30,8 @@
                         </div>
                         <% } %>
                         <div class="buttons">
-                            <button type="submit">Enter</button>
-                            <button><a href="/register">New account</a></button>
+                            <button><a href="/">enter</a></button>
+                            <button type="submit">Register</button>
                         </div>
                     </div>
                 </div>

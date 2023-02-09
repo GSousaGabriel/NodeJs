@@ -23,12 +23,16 @@ const orderSchema = new Schema({
 })
 
 orderSchema.methods.addToOrder = function (items) {
-  for (let index = 0; index < this.items.length; index++) {
-    for (let i = 0; i < items.length; i++) {
-      if(this.items[index].productId.toString() === items[i].productId.toString()){
-        this.items[index].quantity= this.items[index].quantity + items[i].quantity
-      }else{
-        this.items.push(items[i])
+  if(this.items.length=== 0){
+    this.items= items
+  }else{
+    for (let index = 0; index < this.items.length; index++) {
+      for (let i = 0; i < items.length; i++) {
+        if(this.items[index].productId.toString() === items[i].productId.toString()){
+          this.items[index].quantity= this.items[index].quantity + items[i].quantity
+        }else{
+          this.items.push(items[i])
+        }
       }
     }
   }

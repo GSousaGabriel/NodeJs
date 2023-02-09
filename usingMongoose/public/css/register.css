@@ -8,7 +8,7 @@
 
 .data {
     width: 20em;
-    height: 11em;
+    height: 14em;
     border: 2px solid blue;
     border-radius: 12px;
 }
@@ -33,7 +33,7 @@ input {
 
 .buttons{
     position: absolute;
-    right: 4em;
+    right: 7em;
     left: 0;
     bottom: 0.5em;
     padding-bottom: 3px;
@@ -57,4 +57,5 @@ a:hover{
 
 a{
     text-decoration: none;
+
 }
