@@ -4,19 +4,16 @@
 
     <body>
         <main>
-            <form action="/login" method="POST">
+            <form action="/recover" method="POST">
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <div class="centered">
                     <div>
-                        <h1>Login to access the shop</h1>
+                        <h1>Recover your password</h1>
                     </div>
                     <div class="data">
                         <div class="inputs">
                             <div class="username">
                                 <input type="text" id="email" name="email" placeholder="email"/>
-                            </div>
-                            <div class="pass">
-                                <input type="password" id="pass" name="pass" placeholder="password"/>
                             </div>
                         </div>
                         <% if(message) {%>
@@ -27,9 +24,9 @@
                         </div>
                         <% } %>
                         <div class="buttons">
-                            <button type="submit">Enter</button>
+                            <button type="submit">Recover</button>
+                            <button><a href="/">enter</a></button>
                             <button><a href="/register">New account</a></button>
-                            <button><a href="/recover">recover pass</a></button>
                         </div>
                     </div>
                 </div>

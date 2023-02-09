@@ -16,4 +16,12 @@ router.post('/login', authController.postLogin);
 
 router.post('/logout', authController.postLogout);
 
+router.get('/recover', authController.getRecover);
+
+router.post('/recover', authController.postRecover);
+
+router.get('/reset/:token', authController.getReset);
+
+router.post('/reset', authController.postReset);
+
 module.exports = router;

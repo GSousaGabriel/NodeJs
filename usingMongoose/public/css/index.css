@@ -7,7 +7,7 @@
 }
 
 .data {
-    width: 20em;
+    width: 30em;
     height: 11em;
     border: 2px solid blue;
     border-radius: 12px;
@@ -33,7 +33,7 @@ input {
 
 .buttons{
     position: absolute;
-    right: 4em;
+    right: 0;
     left: 0;
     bottom: 0.5em;
     padding-bottom: 3px;

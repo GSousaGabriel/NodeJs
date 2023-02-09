@@ -4,18 +4,17 @@
 
     <body>
         <main>
-            <form action="/login" method="POST">
+            <form action="/reset" method="POST">
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <input type="hidden" name="resetToken" value="<%= resetToken %>">
+                <input type="hidden" name="userId" value="<%= userId %>">
                 <div class="centered">
                     <div>
-                        <h1>Login to access the shop</h1>
+                        <h1>Reset your password</h1>
                     </div>
                     <div class="data">
                         <div class="inputs">
                             <div class="username">
-                                <input type="text" id="email" name="email" placeholder="email"/>
-                            </div>
-                            <div class="pass">
                                 <input type="password" id="pass" name="pass" placeholder="password"/>
                             </div>
                         </div>
@@ -27,9 +26,7 @@
                         </div>
                         <% } %>
                         <div class="buttons">
-                            <button type="submit">Enter</button>
-                            <button><a href="/register">New account</a></button>
-                            <button><a href="/recover">recover pass</a></button>
+                            <button type="submit">Reset password</button>
                         </div>
                     </div>
                 </div>
