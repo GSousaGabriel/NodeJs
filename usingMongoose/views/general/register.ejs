@@ -4,7 +4,7 @@
 
     <body>
         <main>
-            <form action="/register" method="POST">
+            <form action="/register" method="POST" novalidate>
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <div class="centered">
                     <div>
@@ -16,7 +16,7 @@
                                 <input type="text" id="username" name="username" placeholder="username"/>
                             </div>
                             <div class="username">
-                                <input type="text" id="email" name="email" placeholder="email"/>
+                                <input type="email" id="email" name="email" placeholder="email"/>
                             </div>
                             <div class="pass">
                                 <input type="password" id="pass" name="pass" placeholder="password"/>
