@@ -14,7 +14,9 @@ exports.getRegister = (req, res, next) => {
   res.render('general/register', {
     pageTitle: 'Register',
     path: '/register',
-    message: req.flash('error')
+    message: req.flash('error'),
+    input: {username: '', email: '', pass: ''},
+    errors: []
   })
 }
 
@@ -22,7 +24,9 @@ exports.getIndex = (req, res, next) => {
   res.render('general/index', {
     pageTitle: 'Login',
     path: '/',
-    message: req.flash('error')
+    message: req.flash('error'),
+    input: {email: '', pass: ''},
+    errors: []
   })
 }
 
@@ -35,7 +39,9 @@ exports.postLogin = (req, res, next) => {
     return res.status(422).render('general/index', {
       pageTitle: 'Login',
       path: '/',
-      message: errors.errors[0].msg
+      message: errors.errors[0].msg,
+      input: {email: req.body.email, pass: req.body.pass},
+      errors: errors.errors
     })
   } else {
     User.findOne({ email })
@@ -55,7 +61,9 @@ exports.postLogin = (req, res, next) => {
         }
       })
       .catch(error => {
-        console.log(error)
+        const errorReq= new Error(error)
+        errorReq.httpStatusCode= 500
+        return next(errorReq)
       })
   }
 }
@@ -97,7 +105,9 @@ exports.postRecover = (req, res, next) => {
           })
         })
         .catch(error => {
-          console.log(error)
+          const errorReq= new Error(error)
+          errorReq.httpStatusCode= 500
+          return next(errorReq)
         })
     }
   })
@@ -117,7 +127,9 @@ exports.getReset = (req, res, next) => {
       })
     })
     .catch(error => {
-      console.log(error)
+      const errorReq= new Error(error)
+      errorReq.httpStatusCode= 500
+      return next(errorReq)
     })
 }
 
@@ -132,7 +144,9 @@ exports.postReset = (req, res, next) => {
       res.redirect('/')
     })
     .catch(error => {
-      console.log(error)
+      const errorReq= new Error(error)
+      errorReq.httpStatusCode= 500
+      return next(errorReq)
     })
 }
 
@@ -143,12 +157,14 @@ exports.postRegister = (req, res, next) => {
     return res.status(422).render('general/register', {
       pageTitle: 'Register',
       path: '/register',
-      message: errors.errors[0].msg
+      message: errors.errors[0].msg,
+      input: {username: req.body.username, email: req.body.email, pass: req.body.pass},
+      errors: errors.errors
     })
   } else {
     crypt.hash(req.body.pass, 12)
       .then(data => {
-        let newUser = new User({ name: req.body.username, email: req.body.email, pass: data })
+        let newUser = new User({ name: req.body.username.trim(), email: req.body.email.trim(), pass: data.trim() })
         newUser.save()
           .then(data => {
             res.redirect('/')
@@ -164,7 +180,9 @@ exports.postRegister = (req, res, next) => {
           })
       })
       .catch(error => {
-        console.log(error)
+        const errorReq= new Error(error)
+        errorReq.httpStatusCode= 500
+        return next(errorReq)
       })
   }
 }

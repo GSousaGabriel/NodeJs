@@ -11,8 +11,10 @@ exports.getProducts = (req, res, next) => {
           path: '/products'
         })
       })
-      .catch(err => {
-        console.log(err)
+      .catch(error => {
+        const errorReq= new Error(error)
+        errorReq.httpStatusCode= 500
+        return next(errorReq)
       })
 }
 
@@ -26,7 +28,11 @@ exports.getProduct = (req, res, next) => {
           path: '/products'
         })
       })
-      .catch(err => console.log(err))
+      .catch(error => {
+        const errorReq= new Error(error)
+        errorReq.httpStatusCode= 500
+        return next(errorReq)
+      })
 }
 
 exports.getCart = (req, res, next) => {
@@ -52,7 +58,9 @@ exports.postCart = (req, res, next) => {
         res.redirect('/cart')
       })
       .catch(error => {
-        console.log(error)
+        const errorReq= new Error(error)
+        errorReq.httpStatusCode= 500
+        return next(errorReq)
       })
 }
 
@@ -66,7 +74,9 @@ exports.deleteItemOrder = (req, res, next) => {
         res.redirect('/orders')
       })
       .catch(error => {
-        console.log(error)
+        const errorReq= new Error(error)
+        errorReq.httpStatusCode= 500
+        return next(errorReq)
       })
 }
 
@@ -78,7 +88,9 @@ exports.postCartDeleteProduct = (req, res, next) => {
         res.redirect('/cart')
       })
       .catch(error => {
-        console.log(error)
+        const errorReq= new Error(error)
+        errorReq.httpStatusCode= 500
+        return next(errorReq)
       })
 }
 
@@ -95,7 +107,9 @@ exports.getOrders = async (req, res, next) => {
         })
       })
       .catch(error => {
-        console.log(error)
+        const errorReq= new Error(error)
+        errorReq.httpStatusCode= 500
+        return next(errorReq)
       })
 }
 
@@ -105,7 +119,9 @@ exports.getCheckout = (req, res, next) => {
         res.redirect('/products')
       })
       .catch(error => {
-        console.log(error)
+        const errorReq= new Error(error)
+        errorReq.httpStatusCode= 500
+        return next(errorReq)
       })
 }
 
@@ -126,6 +142,8 @@ exports.postOrder = (req, res, next) => {
         res.redirect('/orders')
       })
       .catch(error => {
-        console.log(error)
+        const errorReq= new Error(error)
+        errorReq.httpStatusCode= 500
+        return next(errorReq)
       })
 }

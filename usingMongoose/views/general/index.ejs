@@ -13,10 +13,10 @@
                     <div class="data">
                         <div class="inputs">
                             <div class="username">
-                                <input type="text" id="email" name="email" placeholder="email"/>
+                                <input class="<%= errors.find(e=>e.param == 'email') ? 'invalid' : '' %>" type="text" id="email" name="email" placeholder="email" value="<%= input.email %>"/>
                             </div>
                             <div class="pass">
-                                <input type="password" id="pass" name="pass" placeholder="password"/>
+                                <input class="<%= errors.find(e=>e.param == 'pass') ? 'invalid' : '' %>" type="password" id="pass" name="pass" placeholder="password" value="<%= input.password %>"/>
                             </div>
                         </div>
                         <% if(message) {%>
