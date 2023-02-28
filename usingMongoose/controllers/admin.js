@@ -3,7 +3,7 @@ const Product = require('../models/product')
 exports.getAddProduct = (req, res, next) => {
   res.render('admin/edit-product', {
     pageTitle: 'Add Product',
-    path: '/admin/add-product',
+    path: 'admin/add-product',
     editing: false
   })
 }
@@ -12,8 +12,8 @@ exports.postAddProduct = (req, res, next) => {
   const title = req.body.title
   const price = req.body.price
   const description = req.body.description
-  const imageUrl = req.body.imageUrl
-  const product = new Product({ title, price, description, imageUrl, userId: req.session.user._id })
+  const image = req.file
+  const product = new Product({ title, price, description, image, userId: req.session.user._id })
   product.save()
     .then(result => {
       console.log('Created Product')

@@ -95,14 +95,18 @@ exports.postRecover = (req, res, next) => {
           }
         })
         .then(user => {
+          let email= req.body.email
           res.redirect('/')
 
           return transporter.sendMail({
-            to: req.body.email,
+            to: email,
             from: 'pasteu008@gmail.com',
             subject: "Reset pass!",
             html: `<h1> here it is your token to reset the pass!</h1><br><p>click <a href="http://localhost:3000/reset/${token}">here</a> to reset your pass</p>`
           })
+        })
+        .then(email=>{
+          console.log(email)
         })
         .catch(error => {
           const errorReq= new Error(error)

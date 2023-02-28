@@ -7,16 +7,25 @@ const session = require('express-session')
 const MongoDbStore = require('connect-mongodb-session')(session)
 const csrf = require('csurf')
 const flash = require('connect-flash')
+const multer= require('multer')
 
 const errorController = require('./controllers/error')
 const app = express()
-const mongoUrl = 'mongodb+srv://admin:admin@nodepractice.lok4ozc.mongodb.net/shopp'
+const mongoUrl = 'mongodb+srv://pasteu008:Mp1OK658boYEkndu@store.cqu3smq.mongodb.net/shop'
 const User = require('./models/user')
 const store = new MongoDbStore({
   uri: mongoUrl,
   collection: "sessions"
 })
 const csrfProtection = csrf()
+const fileStorage= multer.diskStorage({
+  destination: (req, file, cb)=>{
+    cb(null, 'images')
+  },
+  filename:(req, file, cb)=>{
+    cb(null, file.filename)
+  }
+})
 
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
@@ -27,6 +36,7 @@ const shopRoutes = require('./routes/shop')
 const isAuth = require('./middlewares/is-auth')
 
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(multer({dest: 'images', storage}).single('image'))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(session({ secret: 'my secret', resave: false, saveUninitialized: false, store: store }))
 app.use(csrfProtection)
