@@ -14,7 +14,7 @@
                                     <% order.items.forEach(p=>{ %>
                                         <li class="list-item">
                                             <% if(p.productId.imageUrl){ %>
-                                                <img class="itemImage" src="<%= p.productId.imageUrl %>" />
+                                                <img class="itemImage" src="\<%= p.productId.imageUrl %>" />
                                                 <% } else{ %>
                                                     <h1>No image!</h1>
                                                     <% } %>
@@ -34,6 +34,8 @@
                                                         </form>
                                         </li>
                                         <% }) %>
+                                        <a href="/orders/<%= order._id %>">Invoice
+                                        </a>
                                 </ul>
                             </li>
                             <% }) %>

@@ -8,3 +8,5 @@ dynamicRoutes/node_modules
 usingMySql/node_modules
 usingMongoDB/node_modules
 usingMongoose/node_modules
+usingMongoose/images/*
+usingMongoose/invoices/*
