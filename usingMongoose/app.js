@@ -79,6 +79,7 @@ app.use(shopRoutes)
 app.use(isAuth, errorController.get404)
 
 app.use((error, req, res, next) => {
+  console.log(error)
   res.redirect('/500')
 })
 

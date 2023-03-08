@@ -27,24 +27,14 @@
                                                         </h2>
                                                         <h2>Total price: <%= p.productId.price * p.quantity %>
                                                         </h2>
-                                                        <form action="/delete-order-item" method="POST">
-                                                            <input type="hidden" value="<%= p.productId._id %>"
-                                                                name="productId" id="productId" />
-                                                            <button type="submit" class="btn danger">Remove</button>
-                                                        </form>
                                         </li>
                                         <% }) %>
-                                        <a href="/orders/<%= order._id %>">Invoice
-                                        </a>
+                                            <a href="/orders/<%= order._id %>">Invoice
+                                            </a>
                                 </ul>
                             </li>
                             <% }) %>
                     </ul>
-                    <div class="centered buy">
-                        <form action="/checkout" method="POST">
-                            <button class="btn success" type="submit">Buy!</button>
-                        </form>
-                    </div>
                     <% } else{ %>
                         <h1>Nothing there!</h1>
                         <% } %>

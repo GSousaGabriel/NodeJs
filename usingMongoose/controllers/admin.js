@@ -114,19 +114,17 @@ exports.getProducts = (req, res, next) => {
     })
 }
 
-exports.postDeleteProduct = (req, res, next) => {
-  const prodId = req.body.productId
+exports.DeleteProduct = (req, res, next) => {
+  const prodId = req.params.productId
   Product.findById(prodId)
-    .then(result => {
+    .then(product => {
       fileHelper.deleteFile(product.imageUrl)
       return Product.deleteOne({ _id: prodId, userId: req.user._id })
     })
     .then(result => {
-      res.redirect('/admin/products')
+      res.status(200).json({message: "success"})
     })
     .catch(error => {
-      const errorReq = new Error(error)
-      errorReq.httpStatusCode = 500
-      return next(errorReq)
+      res.status(500).json({message: "error"})
     })
 }

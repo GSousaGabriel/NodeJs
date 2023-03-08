@@ -1,0 +1,54 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/cart.css">
+    </head>
+
+    <body>
+        <%- include('../includes/navigation.ejs') %>
+            <main>
+                <% if (products.length> 0) { %>
+                    <ul class="cart__item-list">
+                        <% products.forEach(p=> { %>
+                            <li class="cart__item">
+                                <% if(p.productId.imageUrl){ %>
+                                    <img class="itemImage" src="\<%= p.productId.imageUrl %>" width="90px"
+                                        height="90px" />
+                                    <% } else{ %>
+                                        <h1>No image!</h1>
+                                        <% } %>
+                                            <h1>
+                                                <%= p.productId.title %>
+                                            </h1>
+                                            <h2>Quantity: <%= p.quantity %>
+                                            </h2>
+                                            <h2>price: <%= p.productId.price %>
+                                            </h2>
+                                            <h2>Total price: <%= p.productId.price * p.quantity %>
+                                            </h2>
+                                            <form action="/cart-delete-item" method="POST">
+                                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                                <input type="hidden" value="<%= p.productId._id %>" name="productId">
+                                                <button class="btn danger" type="submit">Delete</button>
+                                            </form>
+                            </li>
+                            <% }) %>
+                    </ul>
+                    <h2>Total order price: <%= totalOrder %>
+                    </h2>
+                    <div class="centered order">
+                        <button class="btn success" type="submit" id="order-btn">Buy!</button>
+                        <script src="https://js.stripe.com/v3/"></script>
+                        <script>
+                            var stripe = Stripe('pk_test_51Mj8xaLPYJaXglKDHWB2oY8yO4SsUOGmZkG7eyRz22hcm82085Adv6nFwiwmzjB0Zkcul0NScS8Lgp5DcaYzy4cj00xIYAooGt')
+                            var orderBtn = document.getElementById('order-btn')
+                            orderBtn.addEventListener('click', function () {
+                                stripe.redirectToCheckout({
+                                    sessionId: '<%= sessionId %>'
+                                })
+                            })
+                        </script>
+                    </div>
+                    <% } else { %>
+                        <h1>No Products in Cart!</h1>
+                        <% } %>
+            </main>
+            <%- include('../includes/end.ejs') %>
