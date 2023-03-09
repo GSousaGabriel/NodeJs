@@ -9,5 +9,7 @@ usingMySql/node_modules
 usingMongoDB/node_modules
 usingMongoose/node_modules
 startingAPI/node_modules
+nodeAPI/node_modules
+startingAPI/images/*
 usingMongoose/images/*
 usingMongoose/invoices/*
