@@ -23,7 +23,7 @@ const fileFilter = (req, file, cb) => {
         cb(null, false)
     }
 }
-const mongoUrl = 'mongodb+srv://pasteu008:Mp1OK658boYEkndu@store.cqu3smq.mongodb.net/messages'
+const mongoUrl = 'mongodb+srv://pasteu008:123123456@store.cqu3smq.mongodb.net/messages'
 
 app.use(bodyParser.json())
 app.use(multer({ storage: fileStorage, fileFilter }).single('image'))
@@ -49,7 +49,11 @@ app.use((error, req, res, next) => {
 
 mongoose.connect(mongoUrl)
     .then(success => {
-        app.listen(8080)
+        const server=app.listen(8080)
+        const io = require('./socket').init(server);
+        io.on('connection', socket => {
+          console.log(socket.id);
+        });
     })
     .catch(error => {
         console.log(error)

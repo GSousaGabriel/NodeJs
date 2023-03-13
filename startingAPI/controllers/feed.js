@@ -1,6 +1,7 @@
 const { validationResult } = require('express-validator/check')
 const Post = require('../models/post')
 const User = require('../models/user')
+const io = require('../socket');
 const fs = require('fs')
 const path = require('path')
 
@@ -12,7 +13,7 @@ exports.getPosts = (req, res, next) => {
     Post.find().countDocuments()
         .then(qtd => {
             totalItems = qtd
-            return Post.find().skip((currrentPage - 1) * perPage).limit(perPage)
+            return Post.find().populate('creator').skip((currrentPage - 1) * perPage).limit(perPage)
         })
         .then(posts => {
             res.status(200).json({ message: "success", posts, totalItems })
@@ -41,7 +42,7 @@ exports.getPost = (req, res, next) => {
         })
 }
 
-exports.postPost = (req, res, next) => {
+exports.postPost = async (req, res, next) => {
     const errors = validationResult(req)
 
     if (!errors.isEmpty()) {
@@ -57,45 +58,40 @@ exports.postPost = (req, res, next) => {
     const imageUrl = req.file.path
     const title = req.body.title
     const content = req.body.content
-    let currentPost;
-    let creator;
     const post = new Post({
         title,
         content,
         imageUrl: imageUrl,
         creator: req.userId
     })
-    post.save()
-        .then(post => {
-            currentPost = post
-            console.log(post)
-            return User.findById(req.userId)
-            //create a post
-        })
-        .then(user => {
-            creator = user
-            user.posts.push(post)
-            return user.save()
-        })
-        .then(creator => {
-            res.status(201).json({
-                message: "Successfully created",
-                post: currentPost,
-                creator: {
-                    _id: creator._id,
-                    name: creator.name
-                }
-            })
-        })
-        .catch(error => {
-            if (!error.statusCode) {
-                error.statusCode = 500
+    try {
+        const currentPost = await post.save()
+        const user = await User.findById(req.userId)
+        user.posts.push(post)
+        await user.save()
+        io.getIO().emit('posts', {
+            action: 'create',
+            post: JSON.stringify(
+                { ...post._doc, creator: { _id: req.userId, name: user.name } }
+            )
+        });
+        res.status(201).json({
+            message: "Successfully created",
+            post: currentPost,
+            creator: {
+                _id: req.userId,
+                name: user.name
             }
-            next(error)
         })
+    } catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500
+        }
+        next(error)
+    }
 }
 
-exports.putPost = ((req, res, next) => {
+exports.putPost = async (req, res, next) => {
     const errors = validationResult(req)
 
     if (!errors.isEmpty()) {
@@ -123,68 +119,57 @@ exports.putPost = ((req, res, next) => {
         throw error
     }
 
-    Post.findById(postId)
-        .then(post => {
-            if (post.creator.toString() === req.userId) {
-                if (imageUrl != post.imageUrl) {
-                    clearImage(post.imageUrl)
-                }
-                return Post.updateOne({ _id: postId }, { title, content, imageUrl })
-            } else {
-                const error = new Error("Not your post")
-                error.statusCode = 403
-                throw error
+    try {
+        const post = await Post.findById(postId)
+        if (post.creator.toString() === req.userId) {
+            if (imageUrl != post.imageUrl) {
+                clearImage(post.imageUrl)
             }
-
-        })
-        .then(success => {
-            console.log(success)
-            //create a post
+            const result = await Post.updateOne({ _id: postId }, { title, content, imageUrl })
+            io.getIO().emit('posts', { action: 'update', post: result });
             res.status(201).json({
                 message: "Successfully updated"
             })
-        })
-        .catch(error => {
-            if (!error.statusCode) {
-                error.statusCode = 500
-            }
-            next(error)
-        })
-})
+        } else {
+            const error = new Error("Not your post")
+            error.statusCode = 403
+            throw error
+        }
+    } catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500
+        }
+        next(error)
+    }
+}
 
-exports.deletePost = ((req, res, next) => {
+exports.deletePost = async (req, res, next) => {
     const postId = req.params.postId
 
-    Post.findById(postId)
-        .then(post => {
-            if (post.creator.toString() === req.userId) {
-                clearImage(post.imageUrl)
-                return Post.deleteOne({ _id: postId })
-            } else {
-                const error = new Error("Not your post")
-                error.statusCode = 403
-                throw error
-            }
+    try {
+        const post = await Post.findById(postId)
+        if (post.creator.toString() === req.userId) {
+            clearImage(post.imageUrl)
+            const deleted = await Post.deleteOne({ _id: postId })
+        } else {
+            const error = new Error("Not your post")
+            error.statusCode = 403
+            throw error
+        }
+        const user = await User.findById(req.userId)
+        user.posts.pull(postId)
+        await user.save()
+        io.getIO().emit('posts', { action: 'delete', post: postId });
+        res.status(201).json({
+            message: "Successfully deleted"
         })
-        .then(success => {
-            console.log(success)
-            return User.findById(req.userId)
-        })
-        .then(user=>{
-            user.posts.pull(postId)
-            return user.save()
-        }).then(success=>{
-            res.status(201).json({
-                message: "Successfully deleted"
-            })
-        })
-        .catch(error => {
-            if (!error.statusCode) {
-                error.statusCode = 500
-            }
-            next(error)
-        })
-})
+    } catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500
+        }
+        next(error)
+    }
+}
 
 const clearImage = (filePath) => {
     filePath = path.join(__dirname, '..', filePath)
