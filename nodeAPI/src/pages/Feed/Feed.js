@@ -148,12 +148,18 @@ class Feed extends Component {
       }
     })
       .then(res => {
-        if (res.status !== 200 && res.status !== 201) {
-          throw new Error('Creating or editing a post failed!');
-        }
         return res.json();
       })
       .then(resData => {
+        if (resData.errors && resData.errors[0].status === 422) {
+          throw new Error(
+            "Validation failed. Make sure the email address isn't used yet!"
+          );
+        }
+
+        if(resData.errors){
+          throw new Error('User login failed!')
+        }
         const post = {
           _id: resData.post._id,
           title: resData.post.title,

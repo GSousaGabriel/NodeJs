@@ -7,6 +7,7 @@ const path = require('path')
 const {graphqlHTTP}= require('express-graphql')
 const graphqlSchema= require('./graphql/schema')
 const graphqlResolvers= require('./graphql/resolvers')
+const auth= require('./middlewares/is-auth')
 
 const app = express()
 const fileStorage = multer.diskStorage({
@@ -29,12 +30,18 @@ const mongoUrl = 'mongodb+srv://pasteu008:123123456@store.cqu3smq.mongodb.net/me
 app.use(bodyParser.json())
 app.use(multer({ storage: fileStorage, fileFilter }).single('image'))
 app.use('/images', express.static(path.join(__dirname, '/images')))
-app.use((res, req, next) => {
-    req.setHeader('Access-Control-Allow-Origin', '*')
-    req.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
-    req.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+    
+    if(req.method==="OPTIONS"){
+        return res.sendStatus(200)
+    }
     next()
 })
+
+app.use(auth)
 
 app.use('/graphql', graphqlHTTP({
     schema: graphqlSchema,
