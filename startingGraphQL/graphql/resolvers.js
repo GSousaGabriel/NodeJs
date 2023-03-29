@@ -106,6 +106,85 @@ module.exports = {
 
         const savedPost= await post.save()
         user.posts.push(savedPost)
-        return {...savedPost, _id: savedPost._id.toString(), createdAt: savedPost.createdAt.toISOString(), updatedAt: savedPost.updatedAt.toISOString()}
+        await user.save()
+        return {...savedPost._doc, _id: savedPost._id.toString(), createdAt: savedPost.createdAt.toISOString(), updatedAt: savedPost.updatedAt.toISOString()}
+    },
+
+    getPosts: async function({cPage}, req){
+        if(!req.isAuth){
+            const error= new Error('Not authenticated!')
+            error.code= 401
+            throw error
+        }
+
+        if(!cPage){
+            cPage= 1
+        }
+
+        const perPage= 2
+        const totalPosts= await Post.find().countDocuments()
+        const posts= await Post.find().sort({createdAt: -1}).skip((cPage-1)*perPage).limit(perPage).populate('author')
+        return{posts: posts.map(p=>{
+            return {...p._doc, _id: p._id.toString(), createdAt: p.createdAt.toISOString(), updatedAt: p.updatedAt.toISOString()}
+        }), totalPosts}
+    },
+
+    getPost: async function({id}, req){
+        if(!req.isAuth){
+            const error= new Error('Not authenticated!')
+            error.code= 401
+            throw error
+        }
+        const post= await Post.findById(id).populate("author")
+        if(!post){
+            const error= new Error('No post found!')
+            error.code= 404
+            throw error
+        }
+        return{...post._doc, _id: post._id.toString(), createdAt: post.createdAt.toISOString(), updatedAt: post.updatedAt.toISOString() }
+    },
+
+    updatePost: async function({id, postInput}, req){
+        if(!req.isAuth){
+            const error= new Error('Not authenticated!')
+            error.code= 401
+            throw error
+        }
+        const post= await Post.findById(id).populate("author")
+        if(!post){
+            const error= new Error('No post found!')
+            error.code= 404
+            throw error
+        }
+        if(post.author._id.toString() != req.userId.toString()){
+            const error= new Error('Not authorized!')
+            error.code= 403
+            throw error
+        }
+        const errors=[]
+
+        if(validator.isEmpty(postInput.content) || !validator.isLength(postInput.content, {min: 5})){
+            errors.push({message: 'Small content!'})
+        }
+
+        if(validator.isEmpty(postInput.title) || !validator.isLength(postInput.title, {min: 5})){
+            errors.push({message: 'Small title!'})
+        }
+
+        if(errors.length>0){
+            const error= new Error('Invalid input!')
+            error.data= errors
+            error.code= 422
+            throw error
+        }
+
+        post.title= postInput.title
+        post.content= postInput.content
+        if(postInput.imageUrl!=='undefined'){
+            post.imageUrl= postInput.imageUrl
+        }
+
+        const updatedPost= await post.save()
+        return{...updatedPost._doc, _id: updatedPost._id.toString(), createdAt: updatedPost.createdAt.toISOString(), updatedAt: updatedPost.updatedAt.toISOString() }
     }
 }

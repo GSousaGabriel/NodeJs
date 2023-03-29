@@ -5,7 +5,7 @@ module.exports= (req,res,next)=>{
 
     if(!authHeader){
         req.isAuth= false
-        next()
+        return next()
     }
 
     const token= req.get('Authorization')?.split(' ')[1]
@@ -14,12 +14,12 @@ module.exports= (req,res,next)=>{
         decodedToken= jwt.verify(token, 'supersecrettoken')
     }catch(error){
         req.isAuth= false
-        next()
+        return next()
     }
 
     if(!decodedToken){
         req.isAuth= false
-        next()
+        return next()
     }
 
     req.userId= decodedToken.userId
