@@ -3,7 +3,7 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const multer = require('multer')
 const path = require('path')
-const fs = require('fs')
+const {clearImage}= require('./util/fileManagement')
 
 const { graphqlHTTP } = require('express-graphql')
 const graphqlSchema = require('./graphql/schema')
@@ -90,8 +90,3 @@ mongoose.connect(mongoUrl)
     .catch(error => {
         console.log(error)
     })
-
-const clearImage = (filePath) => {
-    filePath = path.join(__dirname, '..', filePath)
-    fs.unlink(filePath, err => console.log(err))
-}
