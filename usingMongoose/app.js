@@ -1,4 +1,5 @@
 const path = require('path')
+const fs= require('fs')
 
 const express = require('express')
 const bodyParser = require('body-parser')
@@ -8,10 +9,14 @@ const MongoDbStore = require('connect-mongodb-session')(session)
 const csrf = require('csurf')
 const flash = require('connect-flash')
 const multer= require('multer')
+const helmet= require('helmet')
+const compression= require('compression')
+const morgan= require('morgan')
+require('dotenv').config()
 
 const errorController = require('./controllers/error')
 const app = express()
-const mongoUrl = 'mongodb+srv://pasteu008:Mp1OK658boYEkndu@store.cqu3smq.mongodb.net/shop'
+const mongoUrl = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@store.cqu3smq.mongodb.net/${process.env.MONGO_DB}`
 const User = require('./models/user')
 const store = new MongoDbStore({
   uri: mongoUrl,
@@ -41,6 +46,15 @@ const loginRoutes = require('./routes/auth')
 const adminRoutes = require('./routes/admin')
 const shopRoutes = require('./routes/shop')
 const isAuth = require('./middlewares/is-auth')
+
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, 'access.log'),
+  {flags: 'a'}
+)
+
+app.use(helmet())
+app.use(compression())
+app.use(morgan('combined', {stream: accessLogStream}))
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(multer({storage: fileStorage, fileFilter: fileFilter}).single('image'))
@@ -85,7 +99,7 @@ app.use((error, req, res, next) => {
 
 mongoose.connect(mongoUrl)
   .then(result => {
-    app.listen(3000)
+    app.listen(process.env.MONGO_PORT|| 3000)
   })
   .catch(error => {
     console.log(error)

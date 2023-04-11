@@ -5,7 +5,7 @@ const fs = require('fs')
 const path = require('path')
 const PDFDocument = require('pdfkit')
 const session = require('express-session')
-const stripe = require('stripe')('sk_test_51Mj8xaLPYJaXglKDZTgRkcyI1LgYv7MVpxrdYoWT8M1687QIuAuPghBSngvQLBMdyQQcnxIM99Fz3oucasgdspTt002FxMflcQ')
+const stripe = require('stripe')(process.env.PROCESS_STRIPE)
 const ITENS_PAGE = 1
 
 exports.getProducts = (req, res, next) => {

@@ -15,3 +15,5 @@ startingAPI/images/*
 usingMongoose/images/*
 startingGraphQL/images/*
 usingMongoose/invoices/*
+usingMongoose/.env
+usingMongoose/access.log
